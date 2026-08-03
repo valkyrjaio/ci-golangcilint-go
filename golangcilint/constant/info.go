@@ -15,5 +15,5 @@ const (
 	Version = "26.0.0"
 
 	// VersionBuildDateTime is the package version build datetime.
-	VersionBuildDateTime = "August 2 2026 08:36:53 MST"
+	VersionBuildDateTime = "August 2 2026 20:39:07 MST"
 )
