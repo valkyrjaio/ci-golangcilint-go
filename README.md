@@ -13,9 +13,10 @@ states its own package identifier and nothing else.
 
 <p>
     <a href="https://pkg.go.dev/github.com/valkyrjaio/ci-golangcilint-go/v26"><img src="https://pkg.go.dev/badge/github.com/valkyrjaio/ci-golangcilint-go/v26.svg" alt="Go Reference"></a>
+    <a href="https://github.com/valkyrjaio/ci-golangcilint-go/releases"><img src="https://img.shields.io/github/v/release/valkyrjaio/ci-golangcilint-go" alt="Latest Version"></a>
     <a href="https://github.com/valkyrjaio/ci-golangcilint-go/blob/26.x/LICENSE.md"><img src="https://img.shields.io/github/license/valkyrjaio/ci-golangcilint-go.svg" alt="License"></a>
     <a href="https://github.com/valkyrjaio/ci-golangcilint-go/actions/workflows/ci.yml?query=branch%3A26.x"><img src="https://github.com/valkyrjaio/ci-golangcilint-go/actions/workflows/ci.yml/badge.svg?branch=26.x" alt="CI Status"></a>
-    <a href="https://sonarcloud.io/summary/new_code?id=valkyrjaio_ci-golangcilint-go"><img src="https://sonarcloud.io/api/project_badges/measure?project=valkyrjaio_ci-golangcilint-go&metric=coverage" alt="Coverage"></a>
+    <a href="https://coveralls.io/github/valkyrjaio/ci-golangcilint-go?branch=26.x"><img src="https://coveralls.io/repos/github/valkyrjaio/ci-golangcilint-go/badge.svg?branch=26.x" alt="Coverage Status"></a>
     <a href="https://sonarcloud.io/summary/new_code?id=valkyrjaio_ci-golangcilint-go"><img src="https://sonarcloud.io/api/project_badges/measure?project=valkyrjaio_ci-golangcilint-go&metric=sqale_rating" alt="Maintainability Rating"></a>
 </p>
 
