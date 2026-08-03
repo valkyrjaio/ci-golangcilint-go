@@ -39,10 +39,18 @@ config-write: ## Write .golangci.yml from the shipped configuration
 
 # `diff` rather than a flag on the command: it matches `go mod tidy -diff` above,
 # and it prints what differs instead of only reporting that something does.
+#
+# Warning: never pipe the generator straight into `diff`. `make` runs a recipe under
+# `/bin/sh`, which has no `pipefail`, so the pipeline reports `diff`'s status. A
+# generator that fails writes nothing, `diff` then reports the whole file as removed,
+# and the recipe blames a stale file for a crash. Write the output to a file first, so
+# the generator's own status ends the recipe and its stderr is what the reader sees.
 .PHONY: config-check
 config-check: ## Fail where .golangci.yml differs from the shipped configuration
-	@$(VALKYRJALINT) config | diff -u .golangci.yml - \
-		|| { echo 'FAIL  .golangci.yml is stale. Run: make config-write'; exit 1; }
+	@generated=$$(mktemp); trap 'rm -f "$$generated"' EXIT; \
+		$(VALKYRJALINT) config > "$$generated" \
+		&& { diff -u .golangci.yml "$$generated" \
+			|| { echo 'FAIL  .golangci.yml is stale. Run: make config-write'; exit 1; }; }
 
 .PHONY: header-fix
 header-fix: ## Write the copyright header into every Go file that lacks it
