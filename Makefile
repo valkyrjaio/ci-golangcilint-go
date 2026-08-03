@@ -21,8 +21,38 @@ COVERAGE_FLOOR ?= 100
 
 .DEFAULT_GOAL := ci
 
+# This repository ships the configuration and the header tool, so it runs its own
+# build rather than a pinned release of itself. A consuming repository pins this
+# module in .github/ci/lint/go.mod and calls `go tool … valkyrjalint` instead.
+VALKYRJALINT ?= go run ./cmd/valkyrjalint
+
+# The package identifier this repository's headers name. COPYRIGHT_HEADER.md in
+# the .github repository maps every repository to its own value.
+PACKAGE_IDENTIFIER ?= Valkyrja golangci-lint
+
 .PHONY: ci
-ci: tidy-check fmt-check lint coverage ## Run the full CI gate
+ci: tidy-check config-check header-check fmt-check lint coverage ## Run the full CI gate
+
+.PHONY: config-write
+config-write: ## Write .golangci.yml from the shipped configuration
+	$(VALKYRJALINT) config > .golangci.yml
+
+# `diff` rather than a flag on the command: it matches `go mod tidy -diff` above,
+# and it prints what differs instead of only reporting that something does.
+.PHONY: config-check
+config-check: ## Fail where .golangci.yml differs from the shipped configuration
+	@$(VALKYRJALINT) config | diff -u .golangci.yml - \
+		|| { echo 'FAIL  .golangci.yml is stale. Run: make config-write'; exit 1; }
+
+.PHONY: header-fix
+header-fix: ## Write the copyright header into every Go file that lacks it
+	$(VALKYRJALINT) header -package '$(PACKAGE_IDENTIFIER)' -w .
+
+.PHONY: header-check
+header-check: ## Fail where a Go file carries no copyright header, or the wrong one
+	@$(VALKYRJALINT) header -package '$(PACKAGE_IDENTIFIER)' . \
+		&& echo 'PASS  every Go file carries the copyright header' \
+		|| { echo 'FAIL  the files above need the header. Run: make header-fix'; exit 1; }
 
 .PHONY: build
 build: ## Compile every package

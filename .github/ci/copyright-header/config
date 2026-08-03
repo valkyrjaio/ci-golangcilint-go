@@ -23,8 +23,4 @@ EXCLUDED=(
     '*.gitattributes'
     '*.editorconfig'
     '*.gitignore'
-
-    # The header template that golangci-lint's `goheader` linter reads. The file
-    # is the header, so it cannot carry one.
-    '.github/ci/lint/license-header.txt'
 )
