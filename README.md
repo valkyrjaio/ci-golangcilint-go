@@ -53,9 +53,11 @@ PACKAGE_IDENTIFIER ?= Valkyrja Framework
 config-write:
 	$(VALKYRJALINT) config > .golangci.yml
 
-# Never pipe the generator into `diff`. `make` runs a recipe under `/bin/sh`, which
-# has no `pipefail`, so the pipeline reports `diff`'s status and a generator that
-# crashes reads as a stale file.
+# Warning: never pipe the generator straight into `diff`. `make` runs a recipe under
+# `/bin/sh`, which has no `pipefail`, so the pipeline reports `diff`'s status. A
+# generator that fails writes nothing, and the check then blames a stale file for a
+# crash. Write the output to a file first, so the generator's own status ends the
+# recipe.
 .PHONY: config-check
 config-check:
 	@generated=$$(mktemp); trap 'rm -f "$$generated"' EXIT; \
