@@ -1,5 +1,5 @@
 #
-# This file is part of the Project Template package.
+# This file is part of the Valkyrja golangci-lint package.
 #
 # Copyright (c) 2016-present Melech Mizrachi
 #
@@ -8,7 +8,7 @@
 
 # The package this repository is. COPYRIGHT_HEADER.md in the .github repository
 # maps every repository to its own identifier.
-IDENTIFIER='Project Template'
+IDENTIFIER='Valkyrja golangci-lint'
 
 # The files that carry no copyright header. Every other tracked file must carry
 # it, so a new file fails the check until a person adds the header or adds the
