@@ -18,7 +18,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/valkyrjaio/project-template-go/v26/template/constant"
+	"github.com/valkyrjaio/ci-golangcilint-go/v26/golangcilint/constant"
 )
 
 // versionPattern is the MAJOR.MINOR.PATCH format that the release workflow writes.
