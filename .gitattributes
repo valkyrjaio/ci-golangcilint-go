@@ -1,0 +1,10 @@
+*                       text=auto
+
+*.go                    text diff=golang
+*.md                    diff=markdown
+
+go.sum                  -diff linguist-generated
+
+.github/                export-ignore
+.gitattributes          export-ignore
+.gitignore              export-ignore

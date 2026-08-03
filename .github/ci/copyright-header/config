@@ -1,0 +1,30 @@
+#
+# This file is part of the Project Template package.
+#
+# Copyright (c) 2016-present Melech Mizrachi
+#
+# Released under the MIT License. See LICENSE.md for details.
+#
+
+# The package this repository is. COPYRIGHT_HEADER.md in the .github repository
+# maps every repository to its own identifier.
+IDENTIFIER='Project Template'
+
+# The files that carry no copyright header. Every other tracked file must carry
+# it, so a new file fails the check until a person adds the header or adds the
+# file here.
+EXCLUDED=(
+    # A document, a lock file, a workflow, and a configuration file hold no
+    # program code.
+    '*.md'
+    '*.yml'
+    '*.mod'
+    '*.sum'
+    '*.gitattributes'
+    '*.editorconfig'
+    '*.gitignore'
+
+    # The header template that golangci-lint's `goheader` linter reads. The file
+    # is the header, so it cannot carry one.
+    '.github/ci/lint/license-header.txt'
+)

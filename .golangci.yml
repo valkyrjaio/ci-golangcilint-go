@@ -1,0 +1,84 @@
+# golangci-lint configuration for Valkyrja Go repos.
+#
+# Strategy: enable (almost) all linters, then disable only the ones that either
+# conflict with the framework's cross-language conventions or are pure style
+# opinion. Every disable carries a reason so nothing is silently off.
+#
+# The linter version is pinned in .github/ci/lint/go.mod; run via `make lint`.
+version: "2"
+
+linters:
+  default: all
+  disable:
+    # --- Cross-language parity (intentional deviations from Go idiom) ---------
+    # The framework mirrors the PHP reference implementation across every port,
+    # so some idiomatic-Go lints fight names/shapes we chose on purpose. Where a
+    # whole linter only exists to enforce such a rule, it is disabled here; where
+    # a linter is otherwise useful, the specific rule is disabled under settings.
+    - ireturn        # contracts are interfaces; returning them is by design
+    - wrapcheck      # error wrapping style is dictated by THROWABLES.md, not here
+    - err113         # typed/sentinel error parity, not Go's dynamic-error rule
+
+    # --- Redundant / handled elsewhere ----------------------------------------
+    - gocyclo        # complexity: keep one metric (cyclop); drop the duplicates
+    - gocognit       # duplicate complexity metric
+    - maintidx       # duplicate maintainability metric
+    - dupl           # duplicate-code detector is noisy across tests/fixtures
+
+    # --- Opinionated style noise ----------------------------------------------
+    - wsl            # whitespace/cuddle rules — pure opinion
+    - wsl_v5         # newer whitespace linter — same opinion
+    - nlreturn       # blank line before return — pure opinion
+    - varnamelen     # short names (i, r, c) are idiomatic Go
+    - funlen         # function length — not enforced
+    - lll            # line length is a formatter concern (see .editorconfig)
+    - godot          # trailing periods on comments — not enforced
+    - godox          # flags TODO/FIXME — we track those deliberately
+    - nonamedreturns # named returns are used where they read better
+    - mnd            # magic-number detector — too noisy for framework code
+    - tagliatelle    # struct-tag case rules — not applicable yet
+    - gochecknoglobals # binding-key constants live in package-level blocks
+    - gochecknoinits # init() is used sparingly where justified
+
+    # --- Needs project-specific config before it adds value -------------------
+    - depguard       # no import allow/deny policy defined yet
+    - forbidigo      # no forbidden-identifier policy defined yet
+    - exhaustruct    # requiring every struct field set is too strict here
+
+    # --- Test-style opinions --------------------------------------------------
+    - testpackage    # both internal and external test packages are allowed
+    - paralleltest   # t.Parallel() is encouraged, not mandated
+
+  settings:
+    # Enforce the license header. `goheader` is enabled by `default: all`, but a
+    # template is what makes it check anything — without one it accepts any file.
+    # The identifier comes from COPYRIGHT_HEADER.md in the .github repo.
+    goheader:
+      # The template lives in a file rather than inline: goheader compares the
+      # comment verbatim, including each line's ` * ` prefix, and a YAML block
+      # scalar strips the leading space that those lines depend on.
+      template-path: .github/ci/lint/license-header.txt
+    revive:
+      rules:
+        # Parity: the framework keeps Get/Set prefixes on accessors across every
+        # port (GetRoutes, GetHandler, SetHandler), so disable Go's getter rule.
+        - name: get-return
+          disabled: true
+        # Parity: contracts live in a `contract` package and keep the *Contract
+        # name, so `contract.FooContract` "stutters" by revive's rule — this is
+        # intentional and consistent with the other language ports.
+        - name: exported
+          disabled: true
+
+  exclusions:
+    rules:
+      # Relax a few checks in tests, where they add friction without value.
+      - path: _test\.go
+        linters:
+          - errcheck
+          - gosec
+
+formatters:
+  enable:
+    - gofmt
+    - goimports

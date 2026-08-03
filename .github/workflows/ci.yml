@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [ 'master', '*.x' ]
+
+  pull_request:
+    # `edited` is deliberately absent. It fires for a title or description edit, and this workflow
+    # checks file content, which an edit cannot change. Running it on an edit would cost the full
+    # tool suite for a typo. Guarding the jobs on `github.event.changes` instead does not work and
+    # is not safe: a caller job skipped by `if:` never produces the `<job> / <job>` context the
+    # required status checks wait for, so the pull request blocks; and a guard inside the job would
+    # report success without running the tools, so an edit on a red pull request would turn it
+    # green. Pull request metadata is checked by `pr.yml`, which does subscribe to `edited`.
+    types: [ opened, synchronize, reopened ]
+    branches: [ 'master', '*.x' ]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+
+
+  trailing-newline-check:
+    name: Trailing Newline Check
+    if: github.event_name == 'pull_request'
+    uses: valkyrjaio/.github/.github/workflows/_trailing-newline-check.yml@c56ebc8606ffb9031fd45aec671f7ad5324e86db
+    permissions:
+      pull-requests: write
+      contents: read
+    secrets:
+      VALKYRJA_GHA_APP_ID: ${{ secrets.VALKYRJA_GHA_APP_ID }}
+      VALKYRJA_GHA_PRIVATE_KEY: ${{ secrets.VALKYRJA_GHA_PRIVATE_KEY }}
+
+  markdown-check:
+    name: Markdown Check
+    if: github.event_name == 'pull_request'
+    uses: valkyrjaio/.github/.github/workflows/_markdown-check.yml@c56ebc8606ffb9031fd45aec671f7ad5324e86db
+    permissions:
+      pull-requests: write
+      contents: read
+    secrets:
+      VALKYRJA_GHA_APP_ID: ${{ secrets.VALKYRJA_GHA_APP_ID }}
+      VALKYRJA_GHA_PRIVATE_KEY: ${{ secrets.VALKYRJA_GHA_PRIVATE_KEY }}
+
+  # golangci-lint holds every Go file to the copyright header through `goheader`, and it reads only
+  # Go. The task runner and a file of any other type have no mechanism that reads the header.
+  # This job is closed by default instead: it requires the header in every tracked file that
+  # `EXCLUDED` does not match, so a file of a type no tool reads cannot pass in silence.
+  # `.github/ci/copyright-header/config` holds that list. The job stands outside the `source-paths`
+  # filter that the `tools` job derives, because a filter that misses a path skips the job, and a
+  # skipped job reads the same as a clean run.
+  copyright-header-check:
+    name: Copyright Header Check
+    if: github.event_name == 'pull_request'
+    uses: valkyrjaio/.github/.github/workflows/_copyright-header-check.yml@6452916b10a0efdefb89e47482804c9b51544f13
+    permissions:
+      pull-requests: write
+      contents: read
+    secrets:
+      VALKYRJA_GHA_APP_ID: ${{ secrets.VALKYRJA_GHA_APP_ID }}
+      VALKYRJA_GHA_PRIVATE_KEY: ${{ secrets.VALKYRJA_GHA_PRIVATE_KEY }}
+
+  # A check's name is built from every job name down the call chain, so this composes
+  # as `CI / Tools / <Tool> / …`.
+  tools:
+    name: Tools
+    uses: valkyrjaio/.github/.github/workflows/_go-ci-tools.yml@c56ebc8606ffb9031fd45aec671f7ad5324e86db
+    with:
+      source-paths: |
+        **/*.go
+        go.mod
+        go.sum
+        .golangci.yml
+        Makefile
+    secrets:
+      VALKYRJA_GHA_APP_ID: ${{ secrets.VALKYRJA_GHA_APP_ID }}
+      VALKYRJA_GHA_PRIVATE_KEY: ${{ secrets.VALKYRJA_GHA_PRIVATE_KEY }}

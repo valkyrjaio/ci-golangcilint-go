@@ -1,0 +1,19 @@
+name: Update Dependencies
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-dependencies:
+    uses: valkyrjaio/.github/.github/workflows/_go-update-dependencies.yml@c56ebc8606ffb9031fd45aec671f7ad5324e86db
+    secrets:
+      VALKYRJA_GHA_APP_ID: ${{ secrets.VALKYRJA_GHA_APP_ID }}
+      VALKYRJA_GHA_PRIVATE_KEY: ${{ secrets.VALKYRJA_GHA_PRIVATE_KEY }}
+    with:
+      dependencies: |
+        [
+          {"name": "Root Module",   "directory": "."},
+          {"name": "golangci-lint", "directory": ".github/ci/lint"}
+        ]
