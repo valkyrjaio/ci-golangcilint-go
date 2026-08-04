@@ -117,5 +117,5 @@ make ci
 ```
 
 [phpcsfixer url]: https://github.com/valkyrjaio/ci-phpcsfixer-php
-[header url]: https://github.com/valkyrjaio/.github/blob/master/COPYRIGHT_HEADER.md
+[header url]: https://github.com/valkyrjaio/.github/blob/26.x/COPYRIGHT_HEADER.md
 [github url]: https://github.com/valkyrjaio/.github
