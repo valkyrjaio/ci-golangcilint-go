@@ -2,7 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.8...26.x)
+## [Unreleased](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.9...26.x)
+
+## [v26.0.9](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.8...v26.0.9) - 2026-08-15
+
+* [Workflow] ci: Update .github workflow refs to v26.25.0 by [@valkyrja-volundr](https://github.com/valkyrja-volundr)[bot] in https://github.com/valkyrjaio/ci-golangcilint-go/pull/21
 
 ## [v26.0.8](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.7...v26.0.8) - 2026-08-14
 
