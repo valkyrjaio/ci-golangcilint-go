@@ -2,7 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.15...26.x)
+## [Unreleased](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.16...26.x)
+
+## [v26.0.16](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.15...v26.0.16) - 2026-09-25
+
+* [Dependency] build: Update Go dependencies by [@valkyrja-volundr](https://github.com/valkyrja-volundr)[bot] in https://github.com/valkyrjaio/ci-golangcilint-go/pull/31
 
 ## [v26.0.15](https://github.com/valkyrjaio/ci-golangcilint-go/commits/26.x/compare/v26.0.14...v26.0.15) - 2026-09-04
 
