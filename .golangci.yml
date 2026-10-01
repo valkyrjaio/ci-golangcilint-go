@@ -55,6 +55,7 @@ linters:
     - depguard       # no import allow/deny policy defined yet
     - forbidigo      # no forbidden-identifier policy defined yet
     - exhaustruct    # requiring every struct field set is too strict here
+    - exhaustruct_v5 # newer exhaustive-struct linter — same opinion
 
     # --- Test-style opinions --------------------------------------------------
     - testpackage    # both internal and external test packages are allowed
